@@ -33,6 +33,7 @@ export default {
       animation: {
         twinkle: "twinkle 2s ease-in-out forwards",
         meteor: "meteor 3s ease-in-out forwards",
+        "swoop-up": "swoopUp 1s ease-out forwards",
       },
       keyframes: {
         twinkle: {
@@ -59,6 +60,16 @@ export default {
           },
           "100%": {
             opacity: 0,
+            transform: "translateY(0)",
+          },
+        },
+        swoopUp: {
+          "0%": {
+            opacity: "0",
+            transform: "translateY(50px)",
+          },
+          "100%": {
+            opacity: "1",
             transform: "translateY(0)",
           },
         },
