@@ -9,7 +9,7 @@ const Header = () => {
   const pathname = location.pathname;
   const subpath = pathname.split("/").filter(Boolean);
 
-  const [theme, setTheme] = useState("light");
+  const [theme, setTheme] = useState("dark");
 
   useEffect(() => {
     const root = document.documentElement; // <html> 태그
@@ -21,7 +21,7 @@ const Header = () => {
   }, [theme]);
 
   const toggleTheme = () => {
-    setTheme(theme === "light" ? "dark" : "light");
+    setTheme(theme === "dark" ? "light" : "dark");
   };
 
   return (
@@ -36,7 +36,7 @@ const Header = () => {
               <div className="size-6 rounded-full border border-gray-300 dark:border-gray-600 flex items-center justify-center overflow-hidden">
                 <img
                   className="size-5"
-                  src="/logo.png" // 이 파일은 public 폴더에 있어야 합니다.
+                  src="/logo.png"
                   width="24"
                   height="24"
                   alt="logo"
@@ -85,7 +85,6 @@ const Header = () => {
             >
               <svg className="size-full">
                 <use href="/ui.svg#search"></use>{" "}
-                {/* public 폴더의 SVG 스프라이트 */}
               </svg>
             </Link>
 
@@ -107,7 +106,6 @@ const Header = () => {
               </svg>
             </a>
 
-            {/* 3단계: 다크 모드 버튼 로직을 추가합니다. */}
             <button
               id="header-theme-button"
               aria-label={`Toggle light and dark theme`}
@@ -129,7 +127,6 @@ const Header = () => {
               </svg>
             </button>
 
-            {/* 4단계: Drawer(서랍) 메뉴 버튼 로직을 추가합니다. */}
             <button
               id="header-drawer-button"
               aria-label={`Toggle drawer open and closed`}
@@ -143,13 +140,9 @@ const Header = () => {
               )}
             >
               <svg id="drawer-open" className="size-full block">
-                {" "}
-                {/* 기본값 block */}
                 <use href="/ui.svg#menu"></use>
               </svg>
               <svg id="drawer-close" className="size-full hidden">
-                {" "}
-                {/* 기본값 hidden */}
                 <use href="/ui.svg#x"></use>
               </svg>
             </button>
