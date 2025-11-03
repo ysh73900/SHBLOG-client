@@ -1,6 +1,9 @@
 import { useEffect } from "react";
 import { initBG } from "../../utils/bg";
 import TrueFocus from "../../components/TrueFocus";
+import { Link } from "react-router-dom";
+import MeteorShower from "../../components/MeteorShower";
+import TwinklingStars from "../../components/TwinklingStars";
 const MainPage = () => {
   useEffect(() => {
     initBG();
@@ -21,8 +24,8 @@ const MainPage = () => {
       </div>
       <div id="galaxy" className="fixed inset-0">
         <div className="hidden dark:block">
-          {/* <TwinklingStars /> */} {/* 3단계에서 추가 */}
-          {/* <MeteorShower /> */} {/* 3단계에서 추가 */}
+          <TwinklingStars />
+          <MeteorShower />
         </div>
       </div>
 
@@ -69,6 +72,30 @@ const MainPage = () => {
           </div>
         </div>
       </section>
+
+      <div className="relative bg-transparent">
+        <div className="mx-auto max-w-screen-sm p-5 space-y-24 pb-16">
+          <section className="animate-swoop-up">
+            <div className="space-y-4">
+              <div className="flex justify-between">
+                <p className="font-semibold text-black dark:text-white">
+                  최근 포스트
+                </p>
+                <Link
+                  to="/blog"
+                  className="w-fit col-span-3 group flex gap-1 items-center underline decoration-[.5px] decoration-black/25 
+                  dark:decoration-white/50 hover:decoration-black dark:hover:decoration-white text-black dark:text-white
+                  underline-offset-2 blend"
+                >
+                  <span className="text-black/75 dark:text-white/75 group-hover:text-black group-hover:dark:text-white blend text-sm">
+                    전체보기
+                  </span>
+                </Link>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
     </main>
   );
 };
