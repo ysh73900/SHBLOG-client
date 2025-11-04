@@ -10,6 +10,21 @@ const Header = () => {
   const subpath = pathname.split("/").filter(Boolean);
 
   const [theme, setTheme] = useState("dark");
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 0) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  });
 
   useEffect(() => {
     const root = document.documentElement; // <html> 태그
@@ -25,7 +40,10 @@ const Header = () => {
   };
 
   return (
-    <header id="header" className="fixed top-0 w-full h-16 z-50">
+    <header
+      id="header"
+      className={cn("fixed top-0 w-full h-16 z-50", { scrolled: isScrolled })}
+    >
       <Container size="md">
         <div className="relative h-full w-full">
           <div className="absolute left-0 top-1/2 -translate-y-1/2 flex gap-1 font-semibold">
