@@ -6,7 +6,7 @@ const ArrowCard = ({ entry, pill }) => {
     <Link
       className="group relative flex items-center gap-3 rounded-lg border-4 border-black/15 p-4 transition-colors duration-300 ease-in-out
       hover:bg-black/5 dark:border-white/20 hover:dark:bg-white/10"
-      href={`/${entry.slug}`}
+      to={`/blog/${entry.slug}`}
     >
       <div className="blend w-full group-hover:text-black group-hover:dark:text-white">
         <div className="flex flex-wrap items-center gap-2">
