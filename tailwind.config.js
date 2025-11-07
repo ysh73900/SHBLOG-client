@@ -11,6 +11,12 @@ export default {
       fontFamily: {
         sans: ["Pretendard", ...defaultTheme.fontFamily.sans],
       },
+      colors: {
+        black: {
+          DEFAULT: "#000",
+          overlay: "rgba(0, 0, 0, 0.50)",
+        },
+      },
       typography: {
         DEFAULT: {
           css: {
