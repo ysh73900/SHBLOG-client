@@ -407,12 +407,12 @@ article img {
 /* green */
 @keyframes neon4 {
   from {
-    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #b6ff00,
-      0 0 70px #b6ff00, 0 0 80px #b6ff00, 0 0 100px #b6ff00, 0 0 150px #b6ff00;
+    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #10b981,
+      0 0 70px #10b981, 0 0 80px #10b981, 0 0 100px #10b981, 0 0 150px #10b981;
   }
   to {
-    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #b6ff00,
-      0 0 35px #b6ff00, 0 0 40px #b6ff00, 0 0 50px #b6ff00, 0 0 75px #b6ff00;
+    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #10b981,
+      0 0 35px #10b981, 0 0 40px #10b981, 0 0 50px #10b981, 0 0 75px #10b981;
   }
 }
 
