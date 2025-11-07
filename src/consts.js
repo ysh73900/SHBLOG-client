@@ -24,10 +24,10 @@ export const SEARCH = {
 };
 
 // Store Page
-export const STORE = {
-  TITLE: "스토어",
-  DESCRIPTION: "sh의 스토어",
-};
+// export const STORE = {
+//   TITLE: "스토어",
+//   DESCRIPTION: "sh의 스토어",
+// };
 
 // Links
 export const LINKS = [
@@ -39,10 +39,10 @@ export const LINKS = [
     TEXT: "블로그",
     HREF: "/blog",
   },
-  {
-    TEXT: "스토어",
-    HREF: "/store",
-  },
+  // {
+  //   TEXT: "스토어",
+  //   HREF: "/store",
+  // },
   {
     TEXT: "프로필",
     HREF: "/work",
@@ -60,12 +60,10 @@ export const SOCIALS = [
     NAME: "Github",
     ICON: "github",
     TEXT: "ysh73900",
-    // HREF: 'https://github.com/geonhwiii',
   },
   {
     NAME: "LinkedIn",
     ICON: "linkedin",
     TEXT: "seunghoon",
-    // HREF: 'https://www.linkedin.com/in/gunwww/',
   },
 ];
