@@ -101,7 +101,7 @@ const MainPage = () => {
               />
               <span
                 id="neon"
-                data-neon="blue"
+                data-neon="green"
                 className="text-2xl md:text-3xl lg:text-4xl font-bold"
               >
                 LEE SEUNG HOON
