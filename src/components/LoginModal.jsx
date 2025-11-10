@@ -4,9 +4,9 @@ import { clearLoginError, loginUser } from "../features/authSlice";
 import { useNavigate } from "react-router-dom";
 import Modal from "./Modal";
 
-const LoginModal = ({ openModal, handleModalClose }) => {
+const LoginModal = ({ openModal, handleModalClose, handleSignupOpen }) => {
   const dispatch = useDispatch();
-  const { isLoggedIn, loginError } = useSelector((state) => state.auth);
+  const { isLoggedIn, loginError, status } = useSelector((state) => state.auth);
 
   const navigate = useNavigate();
 
@@ -23,6 +23,11 @@ const LoginModal = ({ openModal, handleModalClose }) => {
     } else {
       console.log("로그인 실패: ", resultAction.payload);
     }
+  };
+
+  const handleSignup = () => {
+    handleModalClose();
+    handleSignupOpen();
   };
 
   useEffect(() => {
@@ -84,10 +89,9 @@ const LoginModal = ({ openModal, handleModalClose }) => {
                 <button
                   type="submit"
                   className="w-full px-6 py-2 mt-4 text-white bg-emerald-500 rounded-lg hover:hover:bg-emerald-600 transition-colors"
-                  // disabled={status === "loading"} // 로딩 중에는 버튼 비활성화
+                  disabled={status === "loading"} // 로딩 중에는 버튼 비활성화
                 >
-                  {/* {status === "loading" ? "로그인 중..." : "로그인"} */}
-                  로그인
+                  {status === "loading" ? "로그인 중..." : "로그인"}
                 </button>
               </div>
               {loginError && (
@@ -109,8 +113,8 @@ const LoginModal = ({ openModal, handleModalClose }) => {
             <span>|</span>
             <button
               type="button"
-              //  onClick={onClickSignup}
               className="hover:underline"
+              onClick={handleSignup}
             >
               회원가입
             </button>

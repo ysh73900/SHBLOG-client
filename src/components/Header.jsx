@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import useModal from "../hooks/useModal";
 import LoginModal from "./LoginModal";
 import { logoutUser } from "../features/authSlice";
+import SignupModal from "./SignupModal";
 
 const Header = () => {
   const location = useLocation();
@@ -26,19 +27,15 @@ const Header = () => {
     handleModalOpen: handleLoginOpen,
   } = useModal();
 
-  // const {
-  //   openModal: signupOpen,
-  //   handleModalClose: handleSignupClose,
-  //   handleModalOpen: handleSignupOpen,
-  // } = useModal();
+  const {
+    openModal: signupOpen,
+    handleModalClose: handleSignupClose,
+    handleModalOpen: handleSignupOpen,
+  } = useModal();
 
   const handleLogin = () => {
     handleLoginOpen();
   };
-
-  // const handleSignup = () => {
-  //   handleSignupOpen();
-  // };
 
   const handleLogout = () => {
     const refreshToken = localStorage.getItem("refreshToken");
@@ -228,7 +225,15 @@ const Header = () => {
 
           <div className="absolute left-1/2 top-1/2 -translate-y-1/2"></div>
         </div>
-        <LoginModal openModal={loginOpen} handleModalClose={handleLoginClose} />
+        <LoginModal
+          openModal={loginOpen}
+          handleModalClose={handleLoginClose}
+          handleSignupOpen={handleSignupOpen}
+        />
+        <SignupModal
+          openModal={signupOpen}
+          handleModalClose={handleSignupClose}
+        />
       </Container>
     </header>
   );
