@@ -33,6 +33,19 @@ export const loginUser = createAsyncThunk(
   }
 );
 
+export const signupUser = createAsyncThunk(
+  "auth/signupUser",
+  async (userData, { fulfillWithValue, rejectWithValue }) => {
+    try {
+      const result = await api.post("/api/auth/signup", userData);
+
+      return fulfillWithValue(result.data);
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
+
 export const logoutUser = createAsyncThunk(
   "auth/logoutUser",
   async (refreshTokenArg, { fulfillWithValue, rejectWithValue, dispatch }) => {
@@ -195,6 +208,19 @@ const authSlice = createSlice({
         localStorage.removeItem("userId");
         localStorage.removeItem("userEmail");
         localStorage.removeItem("userName");
+      })
+      // signupUser Thunk 처리
+      .addCase(signupUser.pending, (state) => {
+        state.status = "loading";
+        state.signupError = null;
+      })
+      .addCase(signupUser.fulfilled, (state) => {
+        state.status = "succeeded";
+        state.signupError = null;
+      })
+      .addCase(signupUser.rejected, (state, action) => {
+        state.status = "failed";
+        state.signupError = action.payload;
       })
       // logoutUser Thunk 처리
       .addCase(logoutUser.pending, (state) => {
