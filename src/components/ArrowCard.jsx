@@ -16,18 +16,18 @@ const ArrowCard = ({ entry, pill }) => {
             </div>
           )}
           <div className="font-departure text-sm uppercase">
-            {formatDate(new Date(entry.data.date), "MM dd yyyy")}
+            {formatDate(new Date(entry.publishDate), "MM dd yyyy")}
           </div>
         </div>
 
         <div className="mt-3 font-semibold text-black dark:text-white">
-          {entry.data.title}
+          {entry.title}
         </div>
 
-        <div className="line-clamp-2 text-sm">{entry.data.description}</div>
+        <div className="line-clamp-2 text-sm">{entry.description}</div>
 
         <ul className="mt-2 flex flex-wrap gap-1">
-          {entry.data.tags?.map((tag) => (
+          {entry.tags?.map((tag) => (
             <li
               key={tag}
               className="rounded bg-black/5 px-1 py-0.5 font-departure text-black/75 text-xs uppercase dark:bg-white/20 dark:text-white/75"
