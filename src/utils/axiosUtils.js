@@ -132,10 +132,16 @@ export const setupInterceptors = (store) => {
         isRefreshing = true;
 
         try {
+          const refreshToken = localStorage.getItem("refreshToken");
+
+          if (!refreshToken) {
+            throw new Error("No refresh token available.");
+          }
+
           // 백엔드의 토큰 재발급 API 호출 (리프레시 토큰은 Http Only 쿠키에 있으므로 별도 전송 필요 없음)
           const refreshResult = await axios.post(
             `${instance.defaults.baseURL}/api/auth/refresh`,
-            {},
+            { refreshToken: refreshToken },
             { withCredentials: true }
           );
 
