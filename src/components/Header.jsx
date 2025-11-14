@@ -19,8 +19,6 @@ const Header = () => {
   const [theme, setTheme] = useState("dark");
   const [isScrolled, setIsScrolled] = useState(false);
 
-  const username = localStorage.getItem("username");
-
   const {
     openModal: loginOpen,
     handleModalClose: handleLoginClose,
