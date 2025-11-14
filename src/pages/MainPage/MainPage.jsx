@@ -1,72 +1,26 @@
 import TrueFocus from "../../components/TrueFocus";
 import { Link } from "react-router-dom";
 import ArrowCard from "../../components/ArrowCard";
-import FallingSnow from "../../components/FallingSnow";
-
-const dummyPosts = [
-  {
-    slug: "test-post-4", // key와 href에 사용될 고유 값
-    data: {
-      title: "테스트 포스트 4: Tailwind CSS",
-      description:
-        "네 번째 포스트입니다. 날짜가 가장 최신이므로 맨 위에 보여야 합니다.",
-      date: "2025-11-05", // 👈 YYYY-MM-DD (표준 형식)
-      draft: false,
-      tags: ["Tailwind", "CSS", "Test"], // 👈 tags 배열
-    },
-  },
-  {
-    slug: "test-post-1",
-    data: {
-      title: "테스트 포스트 1: React",
-      description: "첫 번째 포스트입니다. React와 Test 태그를 가집니다.",
-      date: "2025-11-02", // 👈 YYYY-MM-DD
-      draft: false,
-      tags: ["React", "Test"],
-    },
-  },
-  {
-    slug: "test-post-3-draft",
-    data: {
-      title: "테스트 포스트 3 (초안)",
-      description:
-        "이 포스트는 draft: true이므로 필터링되어 목록에 보이지 않습니다.",
-      date: "2025-11-10", // (날짜가 가장 최신이지만 draft임)
-      draft: true, // 👈 true라서 필터링됨
-      tags: ["Draft", "Hidden"],
-    },
-  },
-  {
-    slug: "test-post-2",
-    data: {
-      title: "테스트 포스트 2: JavaScript",
-      description: "두 번째 포스트입니다. 날짜가 가장 오래되었습니다.",
-      date: "2025-11-01", // 👈 YYYY-MM-DD
-      draft: false,
-      tags: ["JavaScript", "Core"],
-    },
-  },
-  {
-    slug: "test-post-5",
-    data: {
-      title: "테스트 포스트 5: SpringBoot",
-      description:
-        "다섯 번째 포스트입니다. 최신 3개(slice(0, 3))에 포함되지 않아 잘려야 합니다.",
-      date: "2025-10-30", // 👈 YYYY-MM-DD (가장 오래된 날짜)
-      draft: false,
-      tags: ["SpringBoot", "Sample"],
-    },
-  },
-];
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { clearPosts, getPosts } from "../../features/postSlice";
 
 const MainPage = () => {
-  const posts = dummyPosts
-    .filter((post) => !post.data.draft) // 초안(draft: true) 거르기
-    .sort(
-      (a, b) =>
-        new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
-    ) // 최신 날짜순 정렬
+  const dispatch = useDispatch();
+  const { items } = useSelector((state) => state.posts);
+
+  const posts = items
+    .filter((post) => !post.draft) // 초안(draft: true) 거르기
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()) // 최신 날짜순 정렬
     .slice(0, 3); // 3개만 자르기
+
+  useEffect(() => {
+    dispatch(getPosts({ page: 0, size: 3 }));
+
+    return () => {
+      dispatch(clearPosts());
+    };
+  }, [dispatch]);
 
   return (
     <main>
@@ -82,9 +36,6 @@ const MainPage = () => {
         <div id="stars2" className="fixed inset-0"></div>
         <div id="stars3" className="fixed inset-0"></div>
       </div> */}
-      <div id="snow" className="fixed inset-0">
-        <FallingSnow />
-      </div>
 
       <section className="relative h-screen w-full overflow-hidden z-20">
         <div className="animate-swoop-up absolute w-full h-full flex item-center justify-center z-20">
