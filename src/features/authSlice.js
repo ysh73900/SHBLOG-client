@@ -12,7 +12,8 @@ export const loginUser = createAsyncThunk(
       const result = await api.post("/api/auth/login", credentials);
 
       // 2. JwtResponse DTO에서 모든 정보 추출
-      const { accessToken, refreshToken, id, username, email } = result.data;
+      const { accessToken, refreshToken, id, username, email, role } =
+        result.data;
 
       // 3. localStorage에 모든 정보 저장
       localStorage.setItem("accessToken", accessToken);
@@ -20,12 +21,13 @@ export const loginUser = createAsyncThunk(
       localStorage.setItem("userId", String(id));
       localStorage.setItem("username", username);
       localStorage.setItem("userEmail", email);
+      localStorage.setItem("role", role);
 
       // 4. Redux 스토어에 전달
       return fulfillWithValue({
         accessToken,
         refreshToken,
-        user: { id, username, email },
+        user: { id, username, email, role },
       });
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
@@ -90,6 +92,7 @@ const initialState = {
   userId: null,
   userEmail: null,
   username: null,
+  role: null,
   status: "idle",
   error: null,
   loginError: null,
@@ -107,6 +110,7 @@ const authSlice = createSlice({
       state.userId = null;
       state.userEmail = null;
       state.username = null;
+      state.role = null;
       state.status = "idle";
       state.error = null;
 
@@ -115,6 +119,7 @@ const authSlice = createSlice({
       localStorage.removeItem("userId");
       localStorage.removeItem("userEmail");
       localStorage.removeItem("username");
+      localStorage.removeItem("role");
     },
     clearError: (state) => {
       state.error = null;
@@ -131,32 +136,37 @@ const authSlice = createSlice({
       const userIdString = localStorage.getItem("userId");
       const userEmail = localStorage.getItem("userEmail");
       const username = localStorage.getItem("username");
+      const role = localStorage.getItem("role");
 
       // userId는 숫자로 변환
       const userId = userIdString ? Number(userIdString) : null;
 
       // 토큰 존재 여부 + 만료 여부 + 필수 사용자 정보의 유효성까지 확인
       // userId가 null이 아니어야 함 (Number(null)은 0이 되므로 주의)
-      if (
-        accessToken &&
-        !isTokenExpired(accessToken) &&
-        userId &&
-        userEmail &&
-        username
-      ) {
+      let isAccessTokenValid = false;
+      try {
+        isAccessTokenValid = accessToken && !isTokenExpired(accessToken);
+      } catch (error) {
+        console.warn("Access token is corrupted, treating as expired.", error);
+        isAccessTokenValid = false;
+      }
+
+      if (isAccessTokenValid && userId && userEmail && username && role) {
         state.isLoggedIn = true;
         state.accessToken = accessToken;
         state.refreshToken = refreshToken;
         state.userId = userId;
         state.userEmail = userEmail;
         state.username = username;
-      } else if (refreshToken && !isTokenExpired(refreshToken)) {
+        state.role = role;
+      } else if (refreshToken && userId && userEmail && username && role) {
         state.isLoggedIn = false;
         state.accessToken = null;
         state.refreshToken = refreshToken;
         state.userId = userId;
         state.userEmail = userEmail;
         state.username = username;
+        state.role = role;
       } else {
         // 토큰이 없거나, 만료되었거나, 필수 사용자 정보 중 하나라도 없으면 모두 초기화
         state.isLoggedIn = false;
@@ -166,9 +176,11 @@ const authSlice = createSlice({
         state.userEmail = null;
         state.username = null;
         localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
         localStorage.removeItem("userId");
         localStorage.removeItem("userEmail");
         localStorage.removeItem("username");
+        localStorage.removeItem("role");
       }
     },
 
@@ -195,6 +207,7 @@ const authSlice = createSlice({
         state.userId = action.payload.user.id;
         state.userEmail = action.payload.user.email;
         state.username = action.payload.user.username;
+        state.role = action.payload.user.role;
         state.loginError = null;
       })
       .addCase(loginUser.rejected, (state, action) => {
@@ -208,6 +221,7 @@ const authSlice = createSlice({
         localStorage.removeItem("userId");
         localStorage.removeItem("userEmail");
         localStorage.removeItem("userName");
+        localStorage.removeItem("role");
       })
       // signupUser Thunk 처리
       .addCase(signupUser.pending, (state) => {
