@@ -15,6 +15,32 @@ export const getPosts = createAsyncThunk(
   }
 );
 
+export const createPost = createAsyncThunk(
+  "posts/createPost",
+  async (postData, { fulfillWithValue, rejectWithValue }) => {
+    try {
+      const result = await api.post("/api/posts", postData);
+
+      return fulfillWithValue(result.data);
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
+
+export const deletePost = createAsyncThunk(
+  "posts/deletePost",
+  async (postId, { fulfillWithValue, rejectWithValue }) => {
+    try {
+      await api.delete(`/api/posts/${postId}`);
+
+      return fulfillWithValue(postId);
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
+
 const initialState = {
   items: [],
   status: "idle",
@@ -51,6 +77,34 @@ const postSlice = createSlice({
         state.totalElements = action.payload.totalElements;
       })
       .addCase(getPosts.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      })
+      // createPost Thunk 처리
+      .addCase(createPost.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(createPost.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.items.unshift(action.payload);
+        state.totalElements += 1;
+      })
+      .addCase(createPost.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      })
+      // deletePost Thunk 처리
+      .addCase(deletePost.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(deletePost.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.items = state.items.filter((post) => post.id !== action.payload);
+        state.totalElements -= 1;
+      })
+      .addCase(deletePost.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
       });
