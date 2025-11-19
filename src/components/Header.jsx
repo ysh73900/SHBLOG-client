@@ -79,15 +79,6 @@ const Header = () => {
               to="/"
               className="flex flex-row gap-1 text-current hover:text-black dark:hover:text-white transition-colors duration-300 ease-in-out"
             >
-              {/* <div className="size-6 rounded-full border border-gray-300 dark:border-gray-600 flex items-center justify-center overflow-hidden">
-                <img
-                  className="size-5"
-                  src="/logo.png"
-                  width="24"
-                  height="24"
-                  alt="logo"
-                />
-              </div> */}
               <div>{SITE.TITLE}</div>
             </Link>
           </div>
@@ -114,9 +105,7 @@ const Header = () => {
           </div>
 
           <div className="buttons absolute right-0 top-1/2 -translate-y-1/2 flex items-center gap-1">
-            {" "}
-            {/* 👈 items-center 추가 */}
-            {/* --- 1. 아이콘 버튼들 --- */}
+            {/* --- 1. 검색 버튼 --- */}
             <Link
               to="/search"
               aria-label={`Search blog posts and projects on ${SITE.TITLE}`}
@@ -133,9 +122,10 @@ const Header = () => {
               )}
             >
               <svg className="size-full">
-                <use href="/ui.svg#search"></use>{" "}
+                <use href="/ui.svg#search"></use>
               </svg>
             </Link>
+            {/* --- 2. 다크모드 버튼 --- */}
             <button
               id="header-theme-button"
               aria-label={`Toggle light and dark theme`}
@@ -156,7 +146,7 @@ const Header = () => {
                 <use href="/ui.svg#moon"></use>
               </svg>
             </button>
-            {/* --- 2. 로그인/회원가입 버튼 --- */}
+            {/* --- 3. 로그인/회원가입 버튼 --- */}
             {isLoggedIn ? (
               <ul className="flex items-center gap-1 text-sm ml-1">
                 <button
