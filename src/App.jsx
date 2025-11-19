@@ -6,6 +6,7 @@ import PostDetailPage from "./pages/PostDetailPage/PostDetailPage";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { loadAuthStateFromLocalStorage } from "./features/authSlice";
+import PostWritePage from "./pages/PostWritePage/PostWritePage";
 
 function App() {
   const dispatch = useDispatch();
@@ -23,6 +24,7 @@ function App() {
           <Route index element={<MainPage />} />
           <Route path="/blog" element={<BlogPage />} />
           <Route path="/blog/:slug" element={<PostDetailPage />} />
+          <Route path="/write" element={<PostWritePage />} />
 
           {/* 3. 로그인이 반드시 필요한 비공개 페이지 */}
           {/* <Route element={<PrivateRoute />}>
