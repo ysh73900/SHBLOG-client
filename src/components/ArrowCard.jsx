@@ -1,7 +1,14 @@
 import { formatDate } from "date-fns";
 import { Link } from "react-router-dom";
+import { cn } from "../utils/utils";
 
-const ArrowCard = ({ entry, pill }) => {
+const ArrowCard = ({ entry, pill, handleDelete, isAdmin, handleModalOpen }) => {
+  const onDeleteClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    handleModalOpen();
+  };
   return (
     <Link
       className="group relative flex items-center gap-3 rounded-lg border-4 border-black/15 p-4 transition-colors duration-300 ease-in-out
@@ -37,6 +44,26 @@ const ArrowCard = ({ entry, pill }) => {
           ))}
         </ul>
       </div>
+
+      {handleDelete && isAdmin && (
+        <button
+          id="header-theme-button"
+          aria-label={`Toggle light and dark theme`}
+          className={cn(
+            "absolute top-0 right-0",
+            "hidden md:flex",
+            "size-9 rounded-full p-2 items-center justify-center",
+            "bg-transparent hover:bg-black/5 dark:hover:bg-white/20",
+            "stroke-current hover:stroke-black hover:dark:stroke-white",
+            "transition-colors duration-300 ease-in-out"
+          )}
+          onClick={onDeleteClick}
+        >
+          <svg className="size-full">
+            <use href="/ui.svg#x"></use>
+          </svg>
+        </button>
+      )}
 
       <svg
         className="stroke-current group-hover:stroke-black group-hover:dark:stroke-white"
