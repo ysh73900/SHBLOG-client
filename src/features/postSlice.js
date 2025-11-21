@@ -7,7 +7,6 @@ export const getPosts = createAsyncThunk(
     try {
       const result = await api.get(`/api/posts?page=${page}&size=${size}`);
 
-      console.log(result);
       return fulfillWithValue(result.data);
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
@@ -87,8 +86,14 @@ const postSlice = createSlice({
       })
       .addCase(createPost.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.items.unshift(action.payload);
-        state.totalElements += 1;
+        // 이미 리스트에 같은 ID의 포스트가 있는지 확인, 없을 때만 추가
+        const exists = state.items.some(
+          (post) => post.id === action.payload.id
+        );
+        if (!exists) {
+          state.items.unshift(action.payload);
+          state.totalElements += 1;
+        }
       })
       .addCase(createPost.rejected, (state, action) => {
         state.status = "failed";
