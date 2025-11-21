@@ -1,19 +1,29 @@
 import { useDispatch, useSelector } from "react-redux";
-import { clearPosts, getPosts } from "../../features/postSlice";
-import { useEffect, useRef } from "react";
+import { clearPosts, deletePost, getPosts } from "../../features/postSlice";
+import { useEffect, useRef, useState } from "react";
 import ArrowCard from "../../components/ArrowCard";
 import { Link } from "react-router-dom";
 import { cn } from "../../utils/utils";
 import useDropdown from "../../hooks/useDropdown";
 import Dropdown from "../../components/Dropdown";
 import useDropdownClick from "../../hooks/useDropdownClick";
+import DeleteConfirmModal from "../../components/DeleteConfirmModal";
+import useModal from "../../hooks/useModal";
 
 const BlogPage = () => {
+  const [deletePostId, setDeletePostId] = useState(null);
+
   const dispatch = useDispatch();
   const { items, status, currentPage, totalElements } = useSelector(
     (state) => state.posts
   );
   const { isLoggedIn, role } = useSelector((state) => state.auth);
+
+  const {
+    openModal: deleteConfirmModalOpen,
+    handleModalClose: handleDeleteConfirmModalClose,
+    handleModalOpen: handleDeleteConfirmModalOpen,
+  } = useModal();
 
   // dropdown
   const dropdownRef = useRef(null);
@@ -29,6 +39,20 @@ const BlogPage = () => {
   };
 
   const canLoadMore = status !== "loading" && items.length < totalElements;
+
+  // 삭제 버튼 클릭 핸들러
+  const handleClickDeleteButton = (postId) => {
+    setDeletePostId(postId);
+    handleDeleteConfirmModalOpen();
+  };
+
+  // 삭제 핸들러
+  const handleDelete = async () => {
+    if (deletePostId) {
+      await dispatch(deletePost(deletePostId));
+      handleDeleteConfirmModalClose();
+    }
+  };
 
   useEffect(() => {
     dispatch(getPosts({ page: 0, size: 5 }));
@@ -49,7 +73,10 @@ const BlogPage = () => {
           <div className="w-full h-full mx-auto max-w-screen-lg pt-5">
             <div className="flex justify-between">
               <div className="page-heading show mb-5">
-                게시글 <span className="text-emerald-500">{totalElements}</span>
+                게시글{" "}
+                <span className="font-departure text-emerald-500">
+                  {totalElements}
+                </span>
               </div>
 
               <div className="relative inline-block" ref={dropdownRef}>
@@ -101,7 +128,14 @@ const BlogPage = () => {
             <ul className="space-y-4">
               {items.map((post, index) => (
                 <li key={post.slug}>
-                  <ArrowCard entry={post} borderNeon delay={index * 0.5} />
+                  <ArrowCard
+                    entry={post}
+                    borderNeon
+                    delay={index * 0.5}
+                    handleDelete={handleDelete}
+                    isAdmin={isAdmin}
+                    handleModalOpen={() => handleClickDeleteButton(post.id)}
+                  />
                 </li>
               ))}
             </ul>
@@ -123,6 +157,12 @@ const BlogPage = () => {
 
         <div className="w-1/5 text-white px-5 pt-5">df</div>
       </div>
+
+      <DeleteConfirmModal
+        openModal={deleteConfirmModalOpen}
+        handleModalClose={handleDeleteConfirmModalClose}
+        handleDelete={handleDelete}
+      />
     </>
   );
 };
