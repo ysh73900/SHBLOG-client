@@ -14,6 +14,19 @@ export const getPosts = createAsyncThunk(
   }
 );
 
+export const getPostBySlug = createAsyncThunk(
+  "posts/getPostBySlug",
+  async (slug, { fulfillWithValue, rejectWithValue }) => {
+    try {
+      const result = await api.get(`/api/posts/${slug}`);
+
+      return fulfillWithValue(result.data);
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
+
 export const createPost = createAsyncThunk(
   "posts/createPost",
   async (postData, { fulfillWithValue, rejectWithValue }) => {
@@ -47,6 +60,11 @@ const initialState = {
   currentPage: 0, // 백엔드 Page 객체의 'number'
   totalPages: 0, // 백엔드 Page 객체의 'totalPages'
   totalElements: 0, // 전체 아이템 개수를 저장할 상태
+
+  // 상세 페이지용 상태
+  currentPost: null,
+  detailStatus: "idle",
+  detailError: null,
 };
 
 const postSlice = createSlice({
@@ -60,6 +78,12 @@ const postSlice = createSlice({
       state.currentPage = 0;
       state.totalPages = 0;
       state.totalElements = 0;
+    },
+    // 상세 페이지 나갈 때 데이터 비우기 (깜빡이 방지)
+    clearCurrentPost: (state) => {
+      state.currentPost = null;
+      state.detailStatus = "idle";
+      state.detailError = null;
     },
   },
   extraReducers: (builder) => {
@@ -78,6 +102,19 @@ const postSlice = createSlice({
       .addCase(getPosts.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
+      })
+      // getPostBySlug Thunk 처리
+      .addCase(getPostBySlug.pending, (state) => {
+        state.detailStatus = "loading";
+        state.detailError = null;
+      })
+      .addCase(getPostBySlug.fulfilled, (state, action) => {
+        state.detailStatus = "succeeded";
+        state.currentPost = action.payload;
+      })
+      .addCase(getPostBySlug.rejected, (state, action) => {
+        state.detailStatus = "failed";
+        state.detailError = action.payload;
       })
       // createPost Thunk 처리
       .addCase(createPost.pending, (state) => {
@@ -116,6 +153,6 @@ const postSlice = createSlice({
   },
 });
 
-export const { clearPosts } = postSlice.actions;
+export const { clearPosts, clearCurrentPost } = postSlice.actions;
 
 export default postSlice.reducer;
