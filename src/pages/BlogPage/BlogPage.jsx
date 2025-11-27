@@ -68,7 +68,7 @@ const BlogPage = () => {
     <>
       <div className="pt-36" />
       <div className="px-5 mb-5 text-2xl text-white">블로그</div>
-      <div className="pb-5 border-t dark:border-white/20 flex animate-swoop-up">
+      <div className="border-t dark:border-white/20 flex animate-swoop-up">
         <div className="w-4/5 border-r border-black/15 dark:border-white/20 px-5">
           <div className="w-full h-full mx-auto max-w-screen-lg pt-5">
             <div className="flex justify-between">
@@ -111,16 +111,6 @@ const BlogPage = () => {
                   >
                     글쓰기
                   </Link>
-                  <a
-                    href="#" // '삭제하기' 로직
-                    className="text-white block px-4 py-2 text-sm hover:bg-zinc-900"
-                    role="menuitem"
-                    onClick={() => {
-                      handleDropdownClose();
-                    }}
-                  >
-                    삭제
-                  </a>
                 </Dropdown>
               </div>
             </div>
