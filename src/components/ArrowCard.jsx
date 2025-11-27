@@ -1,6 +1,6 @@
-import { formatDate } from "date-fns";
 import { Link } from "react-router-dom";
 import { cn } from "../utils/utils";
+import { formatDate } from "../utils/dateUtils";
 
 const ArrowCard = ({ entry, pill, handleDelete, isAdmin, handleModalOpen }) => {
   const onDeleteClick = (e) => {
@@ -23,7 +23,7 @@ const ArrowCard = ({ entry, pill, handleDelete, isAdmin, handleModalOpen }) => {
             </div>
           )}
           <div className="font-departure text-sm uppercase">
-            {formatDate(new Date(entry.publishDate), "MM dd yyyy")}
+            {formatDate(entry.publishDate)}
           </div>
         </div>
 
