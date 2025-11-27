@@ -18,7 +18,6 @@ const PostWritePage = () => {
   const [isDraft, setIsDraft] = useState(false);
 
   const [status, setStatus] = useState("idle");
-  const [error, setError] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -42,7 +41,6 @@ const PostWritePage = () => {
 
     try {
       setStatus("loading");
-      setError(null);
 
       await dispatch(createPost(postData));
 
@@ -50,7 +48,6 @@ const PostWritePage = () => {
       navigate(`/blog`);
     } catch (err) {
       console.error("Failed to save the post: ", err);
-      setError(err.message || "글 작성에 실패했습니다.");
       setStatus("idle");
     }
   };
@@ -59,7 +56,7 @@ const PostWritePage = () => {
     <>
       <div className="pt-36" />
       <div className="pb-5 border-t dark:border-white/20 flex animate-swoop-up">
-        <div className="w-4/5 border-r border-black/15 dark:border-white/20 px-5 ">
+        <div className="w-full border-black/15 dark:border-white/20 px-5 ">
           <div className="w-full h-full mx-auto max-w-screen-lg pt-5">
             <div className="flex justify-between">
               <div className="page-heading show mb-5">새 게시글 작성</div>
@@ -151,7 +148,7 @@ const PostWritePage = () => {
               <div className="flex items-end justify-end">
                 <button
                   type="submit"
-                  className=" px-6 py-2 text-white bg-emerald-500 rounded-lg hover:hover:bg-emerald-600 transition-colors"
+                  className="px-6 py-2 text-white bg-emerald-500 rounded-lg hover:hover:bg-emerald-600 transition-colors"
                 >
                   글 발행하기
                 </button>
