@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { loadAuthStateFromLocalStorage } from "./features/authSlice";
 import PostWritePage from "./pages/PostWritePage/PostWritePage";
+import AdminRoute from "./routes/AdminRoute";
 
 function App() {
   const dispatch = useDispatch();
@@ -24,16 +25,10 @@ function App() {
           <Route index element={<MainPage />} />
           <Route path="/blog" element={<BlogPage />} />
           <Route path="/blog/:slug" element={<PostDetailPage />} />
-          <Route path="/write" element={<PostWritePage />} />
-
-          {/* 3. 로그인이 반드시 필요한 비공개 페이지 */}
-          {/* <Route element={<PrivateRoute />}>
-            <Route path="/mypage" element={<MyPage />} />
-            <Route path="/cart" element={<CartPage />} />
-          </Route> */}
-
-          {/* 4. 일치하는 경로가 없을 때 보여줄 404 페이지 */}
-          {/* <Route path="*" element={<NotFoundPage />} /> */}
+          <Route element={<AdminRoute />}>
+            <Route path="/write" element={<PostWritePage />} />
+            <Route path="/edit/:slug" element={<PostWritePage />} />
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>
