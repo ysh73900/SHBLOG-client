@@ -35,9 +35,15 @@ const Header = () => {
     handleLoginOpen();
   };
 
-  const handleLogout = () => {
-    const refreshToken = localStorage.getItem("refreshToken");
-    dispatch(logoutUser(refreshToken));
+  const handleLogout = async () => {
+    try {
+      const refreshToken = localStorage.getItem("refreshToken");
+      await dispatch(logoutUser(refreshToken)).unwrap();
+    } catch (error) {
+      console.error("로그아웃 실패", error);
+    } finally {
+      window.location.reload();
+    }
   };
 
   useEffect(() => {
