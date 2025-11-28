@@ -97,6 +97,7 @@ const initialState = {
   error: null,
   loginError: null,
   signupError: null,
+  isAuthInitialized: false, // 인증 상태 확인이 끝났는지 체크하는 플래그
 };
 
 const authSlice = createSlice({
@@ -182,6 +183,7 @@ const authSlice = createSlice({
         localStorage.removeItem("username");
         localStorage.removeItem("role");
       }
+      state.isAuthInitialized = true;
     },
 
     // (axios 인터셉터용) 토큰 갱싱 성공 시 스토어 상태를 업데이트하는 리듀서
