@@ -40,6 +40,20 @@ export const createPost = createAsyncThunk(
   }
 );
 
+export const updatePost = createAsyncThunk(
+  "posts/updatePost",
+  async ({ postId, postData }, { fulfillWithValue, rejectWithValue }) => {
+    try {
+      console.log("slice postId -> ", postId);
+      const result = await api.put(`/api/posts/${postId}`, postData);
+
+      return fulfillWithValue(result.data);
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
+
 export const deletePost = createAsyncThunk(
   "posts/deletePost",
   async (postId, { fulfillWithValue, rejectWithValue }) => {
@@ -133,6 +147,26 @@ const postSlice = createSlice({
         }
       })
       .addCase(createPost.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      })
+      // updatePost Thunk 처리
+      .addCase(updatePost.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(updatePost.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        const index = state.items.findIndex(
+          (post) => post.id === action.payload.id
+        );
+
+        // 목록에 해당 글이 있다면, 새 데이터로 교체
+        if (index !== -1) {
+          state.items[index] = action.payload;
+        }
+      })
+      .addCase(updatePost.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
       })
