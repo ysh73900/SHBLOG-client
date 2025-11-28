@@ -34,7 +34,7 @@ const ScrollToTop = () => {
         type="button"
         onClick={scrollToTop}
         className={`
-          text-white shadow-lg transition-all duration-300 ease-in-out transform ${
+          text-white transition-all duration-300 ease-in-out transform ${
             isVisible
               ? "opacity-100 translate-y-0"
               : "opacity-0 translate-y-10 pointer-events-none"
@@ -42,7 +42,7 @@ const ScrollToTop = () => {
         `}
         aria-label="맨 위로 가기"
       >
-        <svg className="size-10">
+        <svg className="size-10 text-black dark:text-white">
           <use href="/ui.svg#circle-chevron-up"></use>
         </svg>
       </button>
