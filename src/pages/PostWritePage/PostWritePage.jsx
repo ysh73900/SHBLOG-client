@@ -1,13 +1,20 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
 import "highlight.js/styles/atom-one-dark.css";
-import { createPost } from "../../features/postSlice";
+import {
+  createPost,
+  getPostBySlug,
+  updatePost,
+} from "../../features/postSlice";
 
 const PostWritePage = () => {
+  const { slug } = useParams();
+  const isEditMode = !!slug;
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -16,12 +23,34 @@ const PostWritePage = () => {
   const [content, setContent] = useState("");
   const [tags, setTags] = useState("");
   const [isDraft, setIsDraft] = useState(false);
+  const [postId, setPostId] = useState(null);
 
   const [status, setStatus] = useState("idle");
+
+  const { currentPost } = useSelector((state) => state.posts);
+
+  // 수정 모드일 경우: 데이터 불러오기 및 폼 채우기
+  useEffect(() => {
+    if (isEditMode) {
+      // Redux에 데이터가 없거나, 다른 글 데이터라면 서버에서 다시 가져옴
+      if (!currentPost || currentPost.slug != slug) {
+        dispatch(getPostBySlug(slug));
+      } else {
+        // 데이터가 있으면 폼(State)에 채우기
+        setPostId(currentPost.id);
+        setTitle(currentPost.title);
+        setDescription(currentPost.description);
+        setContent(currentPost.content);
+        setIsDraft(currentPost.draft);
+        setTags(currentPost.tags ? currentPost.tags.join(", ") : "");
+      }
+    }
+  }, [dispatch, isEditMode, slug, currentPost]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (status !== "idle") return; // 중복 제출 방지
+    console.log("postId", postId);
 
     // tags 문자열을 배열로 변환 (공백 제거, 빈 값 필터링)
     const tagsArray = tags
@@ -42,10 +71,14 @@ const PostWritePage = () => {
     try {
       setStatus("loading");
 
-      await dispatch(createPost(postData));
-
+      if (isEditMode) {
+        await dispatch(updatePost({ postId: postId, postData })).unwrap();
+        navigate(`/blog/${slug}`);
+      } else {
+        await dispatch(createPost(postData));
+        navigate(`/blog`);
+      }
       setStatus("succeeded");
-      navigate(`/blog`);
     } catch (err) {
       console.error("Failed to save the post: ", err);
       setStatus("idle");
@@ -150,7 +183,7 @@ const PostWritePage = () => {
                   type="submit"
                   className="px-6 py-2 text-white bg-emerald-500 rounded-lg hover:hover:bg-emerald-600 transition-colors"
                 >
-                  글 발행하기
+                  {isEditMode ? "글 수정하기" : "글 발행하기"}
                 </button>
               </div>
             </form>
