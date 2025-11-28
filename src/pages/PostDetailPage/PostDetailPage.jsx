@@ -82,13 +82,10 @@ const PostDetailPage = () => {
   }
   return (
     <>
-      <div className="pt-36" />
-      <div className="border-t dark:border-white/20 flex animate animate-swoop-up">
+      <div className="pt-20" />
+      <div className="flex animate animate-swoop-up">
         <div className="w-4/5 h-screen">
           <div className="w-full h-full mx-auto max-w-screen-lg pt-5">
-            {/* <div className="flex justify-between">
-              <div className="page-heading show mb-5">상세페이지</div>
-            </div> */}
             <div className="mb-8">
               {/* 날짜 */}
               <div className="flex justify-between h-[36px]">
@@ -122,12 +119,13 @@ const PostDetailPage = () => {
                     isOpenDropdown={isOpenDropdown}
                     handleDropdownClose={handleDropdownClose}
                   >
-                    <button
-                      className="w-full text-white block px-4 py-2 text-sm hover:bg-zinc-900"
+                    <Link
+                      to={`/edit/${slug}`}
+                      className="w-full text-white block px-4 py-2 text-sm hover:bg-zinc-900 text-center"
                       // onClick={() => handleClickDeleteButton(currentPost.id)}
                     >
                       수정하기
-                    </button>
+                    </Link>
                     <button
                       className="w-full text-white block px-4 py-2 text-sm hover:bg-zinc-900"
                       onClick={() => handleClickDeleteButton(currentPost.id)}
