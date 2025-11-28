@@ -66,11 +66,13 @@ const BlogPage = () => {
 
   return (
     <>
-      <div className="pt-36" />
-      <div className="px-5 mb-5 text-2xl text-white">블로그</div>
-      <div className="border-t dark:border-white/20 flex animate-swoop-up">
+      <div className="pt-20" />
+      <div className="flex animate-swoop-up">
         <div className="w-4/5 border-r border-black/15 dark:border-white/20 px-5">
           <div className="w-full h-full mx-auto max-w-screen-lg pt-5">
+            <div className="font-departure mb-5 font-semibold text-2xl text-white">
+              블로그
+            </div>
             <div className="flex justify-between">
               <div className="page-heading show mb-5">
                 게시글{" "}
@@ -79,40 +81,16 @@ const BlogPage = () => {
                 </span>
               </div>
 
-              <div className="relative inline-block" ref={dropdownRef}>
-                {isAdmin && (
-                  <button
-                    id="header-theme-button"
-                    aria-label={`Toggle light and dark theme`}
-                    className={cn(
-                      "hidden md:flex",
-                      "size-9 rounded-full p-2 items-center justify-center",
-                      "bg-transparent hover:bg-black/5 dark:hover:bg-white/20",
-                      "stroke-current hover:stroke-black hover:dark:stroke-white",
-                      "transition-colors duration-300 ease-in-out"
-                    )}
-                    onClick={() => setIsOpenDropdown(!isOpenDropdown)}
-                  >
-                    <svg className="size-full">
-                      <use href="/ui.svg#more-vertical-dots"></use>
-                    </svg>
-                  </button>
-                )}
-
-                <Dropdown
-                  isOpenDropdown={isOpenDropdown}
-                  handleDropdownClose={handleDropdownClose}
+              {isAdmin && (
+                <Link
+                  to="/write"
+                  className="page-heading show mb-5"
+                  role="menuitem"
+                  onClick={() => handleDropdownClose()}
                 >
-                  <Link
-                    to="/write"
-                    className="text-white block px-4 py-2 text-sm hover:bg-zinc-900"
-                    role="menuitem"
-                    onClick={() => handleDropdownClose()}
-                  >
-                    글쓰기
-                  </Link>
-                </Dropdown>
-              </div>
+                  글쓰기
+                </Link>
+              )}
             </div>
 
             <ul className="space-y-4">
